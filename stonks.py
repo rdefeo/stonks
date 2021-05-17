@@ -27,6 +27,10 @@ class Stonks:
         for ticker in self.data.config.stonks_tickers:
             # debug.info("sToNkS: {}".format(ticker))
             
+            if self.sleepEvent.is_set():
+                self.matrix.clear()
+                return
+
             tickerData = yf.Ticker(ticker).info
             last_price = tickerData["regularMarketPrice"]
             prev_close = tickerData["regularMarketPreviousClose"]

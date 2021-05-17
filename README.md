@@ -60,5 +60,5 @@ The display assumes you are using a 64x32 LED matrix. You can tweak this (untest
 ## Requirements
 The [nhl-led-scoreboard](https://github.com/riffnshred/nhl-led-scoreboard) project has been synced to your pi.
 
-The [yfinance](https://github.com/ranaroussi/yfinance) python package must be installed. This can be achieved by running `pip3 install yfinance`
-
+The [yfinance](https://github.com/ranaroussi/yfinance) python package must be installed. This can be achieved by running `pip3 install yfinance`. Since `yfinance` depends on 
+`numpy` and `pandas`, you may need to ensure they are up to date as well. This can be achieved by running `pip3 install yfinance --upgrade`.

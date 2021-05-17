@@ -26,7 +26,7 @@ Ensure you have the leading spacing correct, because python.
         self.stonks_logo_enabled = json["boards"]["stonks"]["logo_enabled"]
         self.stonks_chart_enabled = json["boards"]["stonks"]["chart_enabled"]
 ```
-These lines ensure that the configuration data for the `stonks` board is read and made available to the code. I added them around line 140, just after the config section for "Clocks".
+These lines ensure that the configuration data for the `stonks` board is read and made available to the code. I added them around line 140, just after the config section for "Clock".
 
 ## Configuration
 Within the `boards` section of the `config.json` file, you will need a section for `stonks`:

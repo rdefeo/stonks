@@ -43,7 +43,7 @@ Within the `boards` section of the `config.json` file, you will need a section f
 Now you can add the `stonks` board to any of the game states in your config!
 
 ### tickers
-A list of stock symbols, using the Yahoo Finance symbology. Basically, look up the stocks you want to use on Yahoo Finance and then cut and past the tickers here.
+A list of stock symbols, using the Yahoo Finance symbology. Basically, look up the stocks you want to use on Yahoo Finance and then cut and paste the tickers here.
 
 ### rotation_rate
 How long, in seconds, each stock stays on the display before switching to the next stock. The total display time for the stocks will be the number of stocks in `tickers` multiplied by the `rotation_rate`

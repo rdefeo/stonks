@@ -13,6 +13,9 @@ RED   = (255,  0,  0)
 LED_WIDTH = 64
 LED_HEIGHT = 32
 
+FULL_DAY_TICKS = 150   # not really true, but maybe
+CHART_Y = 14           # pixel row for the top of the chart
+
 class Stonks:
     def __init__(self, data, matrix, sleepEvent):
         self.data = data
@@ -31,7 +34,13 @@ class Stonks:
                 self.matrix.clear()
                 return
 
-            tickerData = yf.Ticker(ticker).info
+            try:
+                tickerData = yf.Ticker(ticker).info
+            except:
+                debug.error(f"Unable to fetch data for {ticker}")
+                quit()
+                continue
+
             last_price = tickerData["regularMarketPrice"]
             prev_close = tickerData["regularMarketPreviousClose"]
             percent_chg = 100.0*((last_price/prev_close)-1.0)
@@ -40,18 +49,32 @@ class Stonks:
             
             # get intraday chart data, if enabled
             if self.data.config.stonks_chart_enabled:
-                CHART_Y = 14 # pixel row for the top of the chart
-                cd = yf.download(tickers=ticker,interval="1m",period="1d",progress=False)
+
+                try:
+                    cd = yf.download(tickers=ticker,interval="1m",period="1d",progress=False)
+                except:
+                    debug.error(f"Unable to fetch intraday tick data for {ticker}")
+                    quit()
+                    continue
+                
                 prices = cd["Close"].tolist()
                 minp, maxp = min(prices), max(prices)
-                x_inc = len(prices) / LED_WIDTH # compute the X Axis increment
-                prevcl_Y = CHART_Y + (maxp-prev_close)*((LED_HEIGHT-CHART_Y)/(maxp-minp)) # Prev Close Y Axis value
+                lenp = len(prices)
+                x_inc = lenp / LED_WIDTH # compute the X Axis increment
+                # Prev Close Y Axis value
+                if prev_close < minp:
+                    prevcl_Y = LED_HEIGHT-1
+                elif prev_close > maxp:
+                    prevcl_Y = CHART_Y
+                else:
+                    prevcl_Y = int(CHART_Y + (maxp-prev_close)*((LED_HEIGHT-CHART_Y)/(maxp-minp)))
+                # debug.info(f"{ticker} prev close {prevcl_Y}")
                 for x in range(LED_WIDTH):
                     p = prices[int(x * x_inc)] # Get the subsampled price, based on our X Axis position
-                    y = CHART_Y + (maxp-p)*((LED_HEIGHT-CHART_Y)/(maxp-minp)) # compute Y value
+                    y = int(CHART_Y + (maxp-p)*((LED_HEIGHT-CHART_Y)/(maxp-minp))) # compute Y value
                     color = GREEN if p > prev_close else RED
                     step = -1 if y > prevcl_Y else 1 # compute up/down direction for chart area fill
-                    for ys in range(int(y),int(prevcl_Y),step): # draw area fill
+                    for ys in range(y,prevcl_Y,step): # draw area fill
                         dim_y = y/ys if step == 1 else ys/y # dimmer color near prev close
                         self.matrix.draw_pixel((x,ys-1),tuple([int(i * 0.25 * dim_y) for i in color]))
                     self.matrix.draw_pixel((x,y-1),color) # finally, draw the price values

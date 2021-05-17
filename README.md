@@ -1,8 +1,12 @@
 # stonks
-This is a stocks board for the nhl-led-scoreboard project. It will fetch and display stock price information for a list of tickers.
+This is a stocks board for the [nhl-led-scoreboard](https://github.com/riffnshred/nhl-led-scoreboard) project. It will fetch and display single day stock price information for a list of tickers. It will display the single day dollar change and percent change, and an intraday price chart.
+
+<img src="DOGE.jpg" width=300></img>
+<img src="DIS.jpg" width=300></img>
+<img src="TSLA.jpg" width=300></img>
 
 ## Installing
-To use this new board, you will need to make some edits to 3 files within the nhl-led-scoreboard source.
+To use this new board, you will need to make some edits to 3 files within the [nhl-led-scoreboard](https://github.com/riffnshred/nhl-led-scoreboard) source.
 
 1. Place the `stonks.py` file in the `nhl-led-scoreboard/src/boards` directory
 2. Add the following two lines to the bottom of `nhl-led-scoreboard/src/boards.py`:
@@ -52,7 +56,7 @@ A boolean value that determines whether to display the ticker (i.e. company) log
 
 
 ## Requirements
-The `nhl-led-scoreboard` project has been synced to your pi.
+The [nhl-led-scoreboard](https://github.com/riffnshred/nhl-led-scoreboard) project has been synced to your pi.
 
-The `yfinance` python package must be installed.
+The [yfinance](https://github.com/ranaroussi/yfinance) python package must be installed. This can be achieved by running `pip3 install yfinance`
 

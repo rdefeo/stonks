@@ -1,9 +1,9 @@
 # stonks
 This is a stocks board for the [nhl-led-scoreboard](https://github.com/riffnshred/nhl-led-scoreboard) project. It will fetch and display single day stock price information for a list of tickers. It will display the single day dollar change and percent change, and an intraday price chart. The display assumes a 64x32 LED matrix. See Configuration for details.
 
-<img src="DOGE.jpg" width=300></img>
-<img src="DIS.jpg" width=300></img>
-<img src="TSLA.jpg" width=300></img>
+<img src="images/DOGE.jpg" width=300></img>
+<img src="images/DIS.jpg" width=300></img>
+<img src="images/TSLA.jpg" width=300></img>
 
 ## Installing
 To use this new board, you will need to make some edits to 3 files within the [nhl-led-scoreboard](https://github.com/riffnshred/nhl-led-scoreboard) source.

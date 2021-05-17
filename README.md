@@ -16,7 +16,7 @@ To use this new board, you will need to make some edits to 3 files within the [n
 ```
 Ensure you have the leading spacing correct, because python.
 
-3. Update `nhl-led-scoreboard/config/config.schema.json` so that it will allow `stonks` as a valid board. Simply add `"stonks"` to the json blob `"definitions" \ "boards_list" \ "enum"`
+3. Update `nhl-led-scoreboard/config/config.schema.json` so that it will allow `stonks` as a valid board. Simply add `"stonks"` to the json blob `"definitions" \ "boards_list" \ "enum"`. This is near the top of the file, roughly between lines 18 and 30.
 
 4. Add the following 5 lines to `nhl-led-scoreboard/src/data/scoreboard_config.py`:
 ```
@@ -26,7 +26,7 @@ Ensure you have the leading spacing correct, because python.
         self.stonks_logo_enabled = json["boards"]["stonks"]["logo_enabled"]
         self.stonks_chart_enabled = json["boards"]["stonks"]["chart_enabled"]
 ```
-These lines ensure that the configuration data for the `stonks` board is read and made available to the code.
+These lines ensure that the configuration data for the `stonks` board is read and made available to the code. I added them around line 140, just after the config section for "Clocks".
 
 ## Configuration
 Within the `boards` section of the `config.json` file, you will need a section for `stonks`:

@@ -1,5 +1,5 @@
 # stonks
-This is a stocks board for the [nhl-led-scoreboard](https://github.com/riffnshred/nhl-led-scoreboard) project. It will fetch and display single day stock price information for a list of tickers. It will display the single day dollar change and percent change, and an intraday price chart.
+This is a stocks board for the [nhl-led-scoreboard](https://github.com/riffnshred/nhl-led-scoreboard) project. It will fetch and display single day stock price information for a list of tickers. It will display the single day dollar change and percent change, and an intraday price chart. The display assumes a 64x32 LED matrix. See Configuration for details.
 
 <img src="DOGE.jpg" width=300></img>
 <img src="DIS.jpg" width=300></img>
@@ -54,6 +54,8 @@ A boolean value that determines whether a chart will be displayed. If this is `f
 ### logo_enabled (Not Implemented)
 A boolean value that determines whether to display the ticker (i.e. company) logo.
 
+### Other Configuration Options
+The display assumes you are using a 64x32 LED matrix. You can tweak this (untested!) by adjusting the `LED_WIDTH` and `LED_HEIGHT` values in the source file. 
 
 ## Requirements
 The [nhl-led-scoreboard](https://github.com/riffnshred/nhl-led-scoreboard) project has been synced to your pi.

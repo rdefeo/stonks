@@ -38,8 +38,10 @@ Within the `boards` section of the `config.json` file, you will need a section f
             "rotation_rate": 6,
             "chart_enabled": true
             "logo_enabled": false,
-        }
+        },
 ```
+When you add the `"stonks"` section to the config file, make sure you have that last comma!
+
 Now you can add the `stonks` board to any of the game states in your config!
 
 ### tickers

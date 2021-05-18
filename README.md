@@ -72,3 +72,5 @@ The [nhl-led-scoreboard](https://github.com/riffnshred/nhl-led-scoreboard) proje
 
 The [yfinance](https://github.com/ranaroussi/yfinance) python package must be installed. This can be achieved by running `pip3 install yfinance`. Since `yfinance` depends on 
 `numpy` and `pandas`, you may need to ensure they are up to date as well. This can be achieved by running `pip3 install yfinance --upgrade`.
+
+Check out the [yfinance](https://github.com/ranaroussi/yfinance) for more information on installing, etc.

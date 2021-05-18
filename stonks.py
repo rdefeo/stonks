@@ -38,7 +38,6 @@ class Stonks:
                 tickerData = yf.Ticker(ticker).info
             except:
                 debug.error(f"Unable to fetch data for {ticker}")
-                quit()
                 continue
 
             last_price = tickerData["regularMarketPrice"]
@@ -54,7 +53,6 @@ class Stonks:
                     cd = yf.download(tickers=ticker,interval="1m",period="1d",progress=False)
                 except:
                     debug.error(f"Unable to fetch intraday tick data for {ticker}")
-                    quit()
                     continue
                 
                 prices = cd["Close"].tolist()
@@ -66,15 +64,20 @@ class Stonks:
                     prevcl_Y = LED_HEIGHT-1
                 elif prev_close > maxp:
                     prevcl_Y = CHART_Y
+                elif maxp == minp:
+                    prevcl_Y = CHART_Y
                 else:
                     prevcl_Y = int(CHART_Y + (maxp-prev_close)*((LED_HEIGHT-CHART_Y)/(maxp-minp)))
                 # debug.info(f"{ticker} prev close {prevcl_Y}")
                 for x in range(LED_WIDTH):
                     p = prices[int(x * x_inc)] # Get the subsampled price, based on our X Axis position
-                    y = int(CHART_Y + (maxp-p)*((LED_HEIGHT-CHART_Y)/(maxp-minp))) # compute Y value
+                    if maxp == minp:
+                        y = CHART_Y
+                    else:
+                        y = int(CHART_Y + (maxp-p)*((LED_HEIGHT-CHART_Y)/(maxp-minp))) # compute Y value
                     color = GREEN if p > prev_close else RED
                     step = -1 if y > prevcl_Y else 1 # compute up/down direction for chart area fill
-                    for ys in range(y,prevcl_Y,step): # draw area fill
+                    for ys in range(y,prevcl_Y+step,step): # draw area fill
                         dim_y = y/ys if step == 1 else ys/y # dimmer color near prev close
                         self.matrix.draw_pixel((x,ys-1),tuple([int(i * 0.25 * dim_y) for i in color]))
                     self.matrix.draw_pixel((x,y-1),color) # finally, draw the price values

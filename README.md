@@ -9,7 +9,15 @@ This is a stocks board for the [nhl-led-scoreboard](https://github.com/riffnshre
 To use this new board, you will need to make some edits to 3 files within the [nhl-led-scoreboard](https://github.com/riffnshred/nhl-led-scoreboard) source.
 
 1. Place the `stonks.py` file in the `nhl-led-scoreboard/src/boards` directory
-2. Add the following two lines to the bottom of `nhl-led-scoreboard/src/boards.py`:
+2. Add the following two edits to `nhl-led-scoreboard/src/boards.py`:
+
+First, add
+```
+from boards.stonks import Stonks
+```
+to the top of the file, near the other `from` statements.
+
+Then, add the following lines at the bottom of the file:
 ```
     def stonks(self, data, matrix, sleepEvent):
         Stonks(data, matrix, sleepEvent)

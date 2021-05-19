@@ -57,7 +57,7 @@ with open(f"{nhl_path}/config/config.schema.json","w") as json_out:
 print("done.")
 
 # Modify the 'src/data/scoreboard_config.py' file
-new_config_data = '''        # Stonks
+new_config_data = '''# Stonks
         self.stonks_tickers = json["boards"]["stonks"]["tickers"]
         self.stonks_rotation_rate = json["boards"]["stonks"]["rotation_rate"]
         self.stonks_logo_enabled = json["boards"]["stonks"]["logo_enabled"]

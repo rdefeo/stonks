@@ -4,6 +4,9 @@ import os.path
 import shutil
 import re
 import json
+from packaging import version
+
+NHL_LED_SUPPORTED_VERSION = "1.6.5"
 
 # Ask user for the directory to the nhl-led-scoreboard path
 print('')
@@ -16,6 +19,17 @@ if not os.path.isdir(nhl_path):
     print(f"\nERROR: Supplied path does not exist - {nhl_path}")
     quit()
 print(f"INFO: Working path for nhl-led-scoreboard is: {nhl_path}")
+
+# Verify the nhl-led-scoreboard version
+# If the version is higher than what we support, prompt user to continue
+ver = open(f"{nhl_path}/VERSION").read().rstrip()
+if version.parse(ver) > version.parse(NHL_LED_SUPPORTED_VERSION):
+    print("The version of 'nhl-led-scoreboard' installed is greater than the version 'stonks' supports.")
+    print(f"Installed: {ver}, Supported: {NHL_LED_SUPPORTED_VERSION}")
+    yesno = input("Do you wish to continue installation anyway? (y/n): ")
+    if yesno.lower()[0] == 'n':
+        print("\nAborting stonks install")
+        quit()
 
 # Copy 'stonks.py' to 'src/boards/'
 print(f"Copying 'stonks.py' to new location... ",end='')

@@ -6,6 +6,24 @@ This is a stocks board for the [nhl-led-scoreboard](https://github.com/riffnshre
 <img src="images/TSLA.jpg" width=300></img>
 
 ## Installing
+There are two ways to install the stonks board for nhl-led-scoreboard: running the install script or modifying the files manually. The install script will install the `yfinance` python package for you.
+
+### Using the install.sh script
+First, make the install script executable, by running:
+```
+chmod +x nhl-led-scoreboard/install.sh
+```
+Then, run the script!
+```
+./nhl-led-scoreboard/install.sh
+```
+You will be prompted to enter the full path to where your `nhl-led-scoreboard` app is installed. This may typically be `/home/pi/nhl-led-scoreboard`.
+
+If you didn't see any errors, that's it! Now, just add `"stonks"` to one of your board states in your `config/config.json` to see your stock charts. The default installation will seed the stonks charts with Doge Coin and Tesla. Update the `config.json` to suit your investing needs.
+
+Note: If the `nhl-led-scoreboard` source changes significantly, the installation script may fail. If so, try following the manual steps below.
+
+### Manual installation
 To use this new board, you will need to make some edits to 3 files within the [nhl-led-scoreboard](https://github.com/riffnshred/nhl-led-scoreboard) source.
 
 1. Place the `stonks.py` file in the `nhl-led-scoreboard/src/boards` directory

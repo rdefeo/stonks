@@ -30,6 +30,7 @@ class Stonks:
         for ticker in self.data.config.stonks_tickers:
             # debug.info("sToNkS: {}".format(ticker))
             
+            # Check for push button event
             if self.sleepEvent.is_set():
                 self.matrix.clear()
                 return
@@ -48,7 +49,6 @@ class Stonks:
             
             # get intraday chart data, if enabled
             if self.data.config.stonks_chart_enabled:
-
                 try:
                     cd = yf.download(tickers=ticker,interval="1m",period="1d",progress=False)
                 except:
@@ -57,18 +57,16 @@ class Stonks:
                 
                 prices = cd["Close"].tolist()
                 minp, maxp = min(prices), max(prices)
-                lenp = len(prices)
-                x_inc = lenp / LED_WIDTH # compute the X Axis increment
+                x_inc = len(prices) / LED_WIDTH # compute the X Axis increment
+
                 # Prev Close Y Axis value
                 if prev_close < minp:
                     prevcl_Y = LED_HEIGHT-1
-                elif prev_close > maxp:
-                    prevcl_Y = CHART_Y
-                elif maxp == minp:
+                elif prev_close > maxp or maxp == minp:
                     prevcl_Y = CHART_Y
                 else:
                     prevcl_Y = int(CHART_Y + (maxp-prev_close)*((LED_HEIGHT-CHART_Y)/(maxp-minp)))
-                # debug.info(f"{ticker} prev close {prevcl_Y}")
+
                 for x in range(LED_WIDTH):
                     p = prices[int(x * x_inc)] # Get the subsampled price, based on our X Axis position
                     if maxp == minp:

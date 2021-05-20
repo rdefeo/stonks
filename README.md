@@ -62,8 +62,8 @@ Within the `boards` section of the `config.json` file, you will need a section f
                 "DOGE-USD","MMM","TSLA", "BTC-USD", "AAPL", "AMD", "DIS"
             ],
             "rotation_rate": 6,
-            "chart_enabled": true
-            "logo_enabled": false,
+            "chart_enabled": true,
+            "logo_enabled": false
         },
 ```
 When you add the `"stonks"` section to the config file, make sure you have that last comma!

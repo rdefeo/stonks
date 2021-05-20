@@ -41,8 +41,12 @@ class Stonks:
                 debug.error(f"Unable to fetch data for {ticker}")
                 continue
 
-            last_price = tickerData["regularMarketPrice"]
-            prev_close = tickerData["regularMarketPreviousClose"]
+            try:
+                last_price = tickerData["regularMarketPrice"]
+                prev_close = tickerData["regularMarketPreviousClose"]
+            except KeyError:
+                debug.error(f"Yahoo does not have data for {ticker}, skipping")
+                continue
             percent_chg = 100.0*((last_price/prev_close)-1.0)
 
             self.matrix.clear()

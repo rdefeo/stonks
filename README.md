@@ -2,19 +2,22 @@
 This is a stocks board for the [nhl-led-scoreboard](https://github.com/riffnshred/nhl-led-scoreboard) project. It will fetch and display single day stock price information for a list of tickers. It will display the single day dollar change and percent change, and an intraday price chart. The display assumes a 64x32 LED matrix. See Configuration for details.
 
 <img src="images/DOGE.jpg" width=300></img>
-<img src="images/DIS.jpg" width=300></img>
+<img src="images/DIS.jpg" width=300></img><br/>
 <img src="images/TSLA.jpg" width=300></img>
 
 ## Installing
-There are two ways to install the stonks board for nhl-led-scoreboard: running the install script or modifying the files manually. The install script will install the `yfinance` python package for you.
+First, you will need to clone the repository:
+```
+git clone https://github.com/rdefeo/stonks.git
+```
+
+Now that you have the code, there are two ways to complete the install of the stonks board for nhl-led-scoreboard: running the install script or modifying the files manually. The install script will install the `yfinance` python package for you.
 
 ### Using the install.sh script
-First, make the install script executable, by running:
+To run the `install.sh` script, you will need to do the following:
 ```
+cd stonks
 chmod +x nhl-led-scoreboard/install.sh
-```
-Then, run the script!
-```
 ./nhl-led-scoreboard/install.sh
 ```
 You will be prompted to enter the full path to where your `nhl-led-scoreboard` app is installed. This may typically be `/home/pi/nhl-led-scoreboard`.

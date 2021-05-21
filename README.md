@@ -29,7 +29,7 @@ Note: If the `nhl-led-scoreboard` source changes significantly, the installation
 ### Manual installation
 To use this new board, you will need to make some edits to 3 files within the [nhl-led-scoreboard](https://github.com/riffnshred/nhl-led-scoreboard) source.
 
-1. Place the `stonks.py` file in the `nhl-led-scoreboard/src/boards` directory
+1. Copy the `stonks/nhl-led-scoreboard/stonks.py` file into the `nhl-led-scoreboard/src/boards` directory
 2. Add the following two edits to `nhl-led-scoreboard/src/boards.py`:
 
 First, add
@@ -56,6 +56,8 @@ Ensure you have the leading spacing correct, because python.
         self.stonks_chart_enabled = json["boards"]["stonks"]["chart_enabled"]
 ```
 These lines ensure that the configuration data for the `stonks` board is read and made available to the code. I added them around line 140, just after the config section for "Clock".
+
+5. Lastly, add `"stonks"` to one or more of the board `"states"` so that it will appear in your board rotation.
 
 ## Configuration
 Within the `boards` section of the `config.json` file, you will need a section for `stonks`:

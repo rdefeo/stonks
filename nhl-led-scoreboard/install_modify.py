@@ -95,7 +95,7 @@ schema["properties"]["boards"]["properties"]["stonks"] = stonks_schema
 change_list = [
     # Adds stonks to boards list and required boards.
     [ schema["definitions"]["boards_list"]["enum"], "boards_list enum" ],
-    [ schema["properties"]["boards"]["required"], "required bords" ],
+    [ schema["properties"]["boards"]["required"], "required boards" ],
 
     # Adds stonks to all board states, because doge
     [ schema["properties"]["states"]["properties"]["off_day"]["default"], "off_day default state"],

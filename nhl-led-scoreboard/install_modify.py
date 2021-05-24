@@ -11,6 +11,7 @@ NHL_LED_SUPPORTED_VERSION = "1.6.5"
 # Ask user for the directory to the nhl-led-scoreboard path
 print('')
 nhl_path = input('Enter the full path to `nhl-led-scoreboard`: ')
+cwd = os.path.os.getcwd()
 
 # Verify the path
 if nhl_path[-1] == '/':
@@ -85,5 +86,33 @@ config['boards']['stonks'] = new_config
 with open(f"{nhl_path}/config/config.json","w") as json_out:
     json.dump(config,json_out,indent=4)
     json_out.close()
+print("done.")
+
+# Modify the 'config/config.schema.json' file
+print(f"Updating '{nhl_path}/config/config.schema.json'... ",end='')
+with open(f"{nhl_path}/config/config.schema.json", "r") as f:
+    schema = json.load(f)
+    f.close()
+with open(f"{cwd}/stonks.config.schema.json", "r") as f:
+    stonks_schema = json.load(f)
+    f.close()
+
+# Adds stonks to boards list and required boards.
+schema["definitions"]["boards_list"]["enum"].append("stonks")
+schema["properties"]["boards"]["required"].append("stonks")
+
+# Add stonks settings to boards properties.
+schema["properties"]["boards"]["properties"]["stonks"] = stonks_schema
+
+# Adds stonks to all board states, because doge.
+schema["properties"]["states"]["properties"]["off_day"]["default"].append("stonks")
+schema["properties"]["states"]["properties"]["scheduled"]["default"].append("stonks")
+schema["properties"]["states"]["properties"]["intermission"]["default"].append("stonks")
+schema["properties"]["states"]["properties"]["post_game"]["default"].append("stonks")
+
+# Write out modified schema to nhl directory.
+with open(f"{nhl_path}/config/config.schema.json", "w") as outfile:
+    json.dump(schema, outfile, indent=4)
+    outfile.close()
 print("done.")
 

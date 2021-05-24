@@ -48,15 +48,6 @@ with open(f"{nhl_path}/src/boards/boards.py",'r+') as boards:
     boards.close()
 print("done.")
 
-# Modify the 'config/config.schema.json' file
-print(f"Updating '{nhl_path}/config/config.schema.json'... ",end='')
-schema = json.load(open(f"{nhl_path}/config/config.schema.json"))
-schema['definitions']['boards_list']['enum'].append('stonks')
-with open(f"{nhl_path}/config/config.schema.json","w") as json_out:
-    json.dump(schema,json_out,indent=4)
-    json_out.close()
-print("done.")
-
 # Modify the 'src/data/scoreboard_config.py' file
 new_config_data = '''# Stonks
         self.stonks_tickers = json["boards"]["stonks"]["tickers"]
@@ -75,7 +66,7 @@ with open(f"{nhl_path}/src/data/scoreboard_config.py",'r+') as sconfig:
 print("done.")
 
 # Modify the 'config/config.json' file
-print(f"Updating '{nhl_path}/config/config.json'... ",end='')
+print(f"Updating '{nhl_path}/config/config.json'... ")
 new_config = dict()
 new_config["tickers"] = ["DOGE-USD", "TSLA"]
 new_config["rotation_rate"] = 6
@@ -88,8 +79,8 @@ with open(f"{nhl_path}/config/config.json","w") as json_out:
     json_out.close()
 print("done.")
 
-# Modify the 'config/config.schema.json' file
-print(f"Updating '{nhl_path}/config/config.schema.json'... ",end='')
+# Modify the 'config/config.schema.json' file. Checks if changes present to preven duplicates.
+print(f"Updating '{nhl_path}/config/config.schema.json'... ")
 with open(f"{nhl_path}/config/config.schema.json", "r") as f:
     schema = json.load(f)
     f.close()
@@ -97,22 +88,36 @@ with open(f"{cwd}/stonks.config.schema.json", "r") as f:
     stonks_schema = json.load(f)
     f.close()
 
-# Adds stonks to boards list and required boards.
-schema["definitions"]["boards_list"]["enum"].append("stonks")
-schema["properties"]["boards"]["required"].append("stonks")
-
-# Add stonks settings to boards properties.
+# Add stonks board settings from config.schema.json to boards properties.
 schema["properties"]["boards"]["properties"]["stonks"] = stonks_schema
 
-# Adds stonks to all board states, because doge.
-schema["properties"]["states"]["properties"]["off_day"]["default"].append("stonks")
-schema["properties"]["states"]["properties"]["scheduled"]["default"].append("stonks")
-schema["properties"]["states"]["properties"]["intermission"]["default"].append("stonks")
-schema["properties"]["states"]["properties"]["post_game"]["default"].append("stonks")
+# Individual changes
+change_list = [
+    # Adds stonks to boards list and required boards.
+    [ schema["definitions"]["boards_list"]["enum"], "boards_list enum" ],
+    [ schema["properties"]["boards"]["required"], "required bords" ],
+
+    # Adds stonks to all board states, because doge
+    [ schema["properties"]["states"]["properties"]["off_day"]["default"], "off_day default state"],
+    [ schema["properties"]["states"]["properties"]["scheduled"]["default"], "scheduled default state" ], 
+    [ schema["properties"]["states"]["properties"]["post_game"]["default"], "post_game default state" ], 
+]
+
+# Checks if stonks already present.
+def stonks_check(change):
+    if not "stonks" in change[0]:
+        change[0].append("stonks")
+        print(f'"stonks" added to {str(change[1])}.')
+    else:
+        print(f'"stonks" already found in {str(change[1])}. Skipping change.')
+
+# Iterate changes.
+for change in change_list:
+    stonks_check(change)
 
 # Write out modified schema to nhl directory.
 with open(f"{nhl_path}/config/config.schema.json", "w") as outfile:
     json.dump(schema, outfile, indent=4)
     outfile.close()
-print("done.")
+print("... done.")
 

@@ -1,1 +1,2 @@
 yfinance>=0.1.55
+numpy>= 1.16.5

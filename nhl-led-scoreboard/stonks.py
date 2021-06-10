@@ -5,6 +5,7 @@ import debug
 from time import sleep
 import yfinance as yf
 from collections import defaultdict
+import signal
 #import json
 
 WHITE = (255,255,255)
@@ -21,13 +22,15 @@ STONKS_FONT = ImageFont.truetype(get_file("assets/fonts/BMmini.TTF"), 8)
 
 stonks_failed_tickers = defaultdict(int) # keep track of tickers which fail to load data
 
+def signal_handler(signum, frame):
+    raise Exception("Timed out")
+
 class Stonks:
     def __init__(self, data, matrix, sleepEvent):
         self.data = data
         self.matrix = matrix
         self.sleepEvent = sleepEvent
         self.sleepEvent.clear()
-        self.render()
 
     def render(self):
         for ticker in self.data.config.stonks_tickers:
@@ -44,12 +47,15 @@ class Stonks:
                 #debug.info(f"Skipping ticker {ticker} due to too many failed attempts: {stonks_failed_tickers[ticker]}")
                 continue
 
+            signal.signal(signal.SIGALRM, signal_handler)
+            signal.alarm(10) # 10 seconds
             try:
                 tickerData = yf.Ticker(ticker).info
             except:
                 stonks_failed_tickers[ticker] += 1
-                debug.error(f"Unable to fetch price data for {ticker}")
+                debug.error(f"Unable to fetch price data for {ticker}, or more than 10 sec elapsed")
                 continue
+            signal.alarm(0)
 
             try:
                 last_price = tickerData["regularMarketPrice"]
@@ -58,21 +64,24 @@ class Stonks:
                 stonks_failed_tickers[ticker] += 1
                 debug.error(f"Yahoo does not have data for {ticker}, skipping")
                 continue
-            percent_chg = 100.0*((last_price/prev_close)-1.0)
 
+            stonks_failed_tickers[ticker] = 0     # reset failure count
+            percent_chg = 100.0*((last_price/prev_close)-1.0)
             self.matrix.clear()
             
             # get intraday chart data, if enabled
             if self.data.config.stonks_chart_enabled:
+                signal.signal(signal.SIGALRM, signal_handler)
+                signal.alarm(5)
                 try:
                     cd = yf.download(tickers=ticker,interval="1m",period="1d",progress=False)
                 except:
                     debug.error(f"Unable to fetch intraday tick data for {ticker}")
                     continue
-                
+                signal.alarm(0)
                 prices = cd["Close"].tolist()
-                if not prices:
-                    debug.info(f"No chart data for {ticker}, trying longer history")
+                if len(prices) < 4:
+                    debug.info(f"Not enough chart data for {ticker}, trying longer history")
                     try:
                         cd = yf.download(tickers=ticker,interval="1m",period="2d",progress=False)
                         prices = cd["Close"].tolist()
@@ -90,7 +99,10 @@ class Stonks:
                 elif prev_close > maxp or maxp == minp:
                     prevcl_Y = CHART_Y
                 else:
-                    prevcl_Y = int(CHART_Y + (maxp-prev_close)*((LED_HEIGHT-CHART_Y)/(maxp-minp)))
+                    if maxp == minp:
+                        prevcl_Y = CHART_Y
+                    else:
+                        prevcl_Y = int(CHART_Y + (maxp-prev_close)*((LED_HEIGHT-CHART_Y)/(maxp-minp)))
 
                 for x in range(LED_WIDTH):
                     p = prices[int(x * x_inc)] # Get the subsampled price, based on our X Axis position

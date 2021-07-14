@@ -44,7 +44,10 @@ class Stonks:
             
             # this ticker has failed a few times, stop trying to fetch data going forward
             if stonks_failed_tickers[ticker] > 2:
-                #debug.info(f"Skipping ticker {ticker} due to too many failed attempts: {stonks_failed_tickers[ticker]}")
+                debug.info(f"Skipping ticker {ticker} due to too many failed attempts: {stonks_failed_tickers[ticker]}")
+                stonks_failed_tickers[ticker] += 1
+                if stonks_failed_tickers[ticker] > 5:
+                    stonks_failed_tickers[ticker] = 0
                 continue
 
             signal.signal(signal.SIGALRM, signal_handler)
@@ -54,6 +57,7 @@ class Stonks:
             except:
                 stonks_failed_tickers[ticker] += 1
                 debug.error(f"Unable to fetch price data for {ticker}, or more than 10 sec elapsed")
+                signal.alarm(0)
                 continue
             signal.alarm(0)
 
@@ -77,6 +81,7 @@ class Stonks:
                     cd = yf.download(tickers=ticker,interval="1m",period="1d",progress=False)
                 except:
                     debug.error(f"Unable to fetch intraday tick data for {ticker}")
+                    signal.alarm(0)
                     continue
                 signal.alarm(0)
                 prices = cd["Close"].tolist()
@@ -89,7 +94,10 @@ class Stonks:
                             prices.append(0.0)
                     except:
                         debug.error(f"Unable to fetch 2d intraday tick data for {ticker}")
-
+                        prices.append(0.0)
+                        signal.alarm(0)
+                signal.alarm(0)
+                
                 minp, maxp = min(prices), max(prices)
                 x_inc = len(prices) / LED_WIDTH # compute the X Axis increment
 

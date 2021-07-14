@@ -10,15 +10,19 @@ NHL_LED_SUPPORTED_VERSION = "1.6.5"
 
 # Ask user for the directory to the nhl-led-scoreboard path
 print('')
-nhl_path = input('Enter the full path to `nhl-led-scoreboard`: ')
-cwd = os.path.os.getcwd()
+print('Please enter the full path to `nhl-led-scoreboard`. Typically, this is')
+print('located in `/home/pi/nhl-led-scoreboard`.')
+valid_path = False
+while not valid_path:
+    nhl_path = input('Enter the full path to `nhl-led-scoreboard`: ')
+    cwd = os.path.os.getcwd()
+    if nhl_path[-1] == '/':
+        nhl_path = nhl_path[0:-1]
+    if not os.path.isdir(nhl_path):
+        print(f"\nERROR: Supplied path does not exist - {nhl_path}")
+        continue
+    valid_path = True
 
-# Verify the path
-if nhl_path[-1] == '/':
-    nhl_path = nhl_path[0:-1]
-if not os.path.isdir(nhl_path):
-    print(f"\nERROR: Supplied path does not exist - {nhl_path}")
-    quit()
 print(f"INFO: Working path for nhl-led-scoreboard is: {nhl_path}")
 
 # Verify the nhl-led-scoreboard version
@@ -41,10 +45,13 @@ print("done.")
 print(f"Updating '{nhl_path}/src/boards/boards.py'... ",end='')
 with open(f"{nhl_path}/src/boards/boards.py",'r+') as boards:
     text = boards.read()
-    text = re.sub("from time import sleep\n","from time import sleep\nfrom boards.stonks import Stonks\n",text)
-    text += "\n\n    def stonks(self, data, matrix, sleepEvent):\n        Stonks(data, matrix, sleepEvent)"
-    boards.seek(0)
-    boards.write(text)
+    if not 'from boards.stonks import Stonks' in text:
+        text = re.sub("from time import sleep\n","from time import sleep\nfrom boards.stonks import Stonks\n",text)
+        text += "\n\n    def stonks(self, data, matrix, sleepEvent):\n        Stonks(data, matrix, sleepEvent)"
+        boards.seek(0)
+        boards.write(text)
+    else:
+        print(f"\n * '{nhl_path}/src/boards/boards.py' not modified as it has already been updated")
     boards.close()
 print("done.")
 
@@ -59,9 +66,12 @@ new_config_data = '''# Stonks
 print(f"Updating '{nhl_path}/src/data/scoreboard_config.py'... ",end='')
 with open(f"{nhl_path}/src/data/scoreboard_config.py",'r+') as sconfig:
     text = sconfig.read()
-    text = re.sub("# Fonts\n",new_config_data+"        # Fonts\n",text)
-    sconfig.seek(0)
-    sconfig.write(text)
+    if not '# Stonks' in text:
+        text = re.sub("# Fonts\n",new_config_data+"        # Fonts\n",text)
+        sconfig.seek(0)
+        sconfig.write(text)
+    else:
+        print(f"\n * '{nhl_path}/src/data/scoreboard_config.py' not modified as it has already been updated")
     sconfig.close()
 print("done.")
 

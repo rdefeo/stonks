@@ -47,7 +47,7 @@ with open(f"{nhl_path}/src/boards/boards.py",'r+') as boards:
     text = boards.read()
     if not 'from boards.stonks import Stonks' in text:
         text = re.sub("from time import sleep\n","from time import sleep\nfrom boards.stonks import Stonks\n",text)
-        text += "\n\n    def stonks(self, data, matrix, sleepEvent):\n        Stonks(data, matrix, sleepEvent)"
+        text += "\n\n    def stonks(self, data, matrix, sleepEvent):\n        Stonks(data, matrix, sleepEvent).render()"
         boards.seek(0)
         boards.write(text)
     else:
@@ -89,7 +89,7 @@ with open(f"{nhl_path}/config/config.json","w") as json_out:
     json_out.close()
 print("done.")
 
-# Modify the 'config/config.schema.json' file. Checks if changes present to preven duplicates.
+# Modify the 'config/config.schema.json' file. Checks if changes present to prevent duplicates.
 print(f"Updating '{nhl_path}/config/config.schema.json'... ")
 with open(f"{nhl_path}/config/config.schema.json", "r") as f:
     schema = json.load(f)
@@ -117,9 +117,9 @@ change_list = [
 def stonks_check(change):
     if not "stonks" in change[0]:
         change[0].append("stonks")
-        print(f'"stonks" added to {str(change[1])}.')
+        print(f'  "stonks" added to {str(change[1])}.')
     else:
-        print(f'"stonks" already found in {str(change[1])}. Skipping change.')
+        print(f'  "stonks" already found in {str(change[1])}. Skipping change.')
 
 # Iterate changes.
 for change in change_list:

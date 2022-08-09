@@ -121,8 +121,7 @@ class Stonks:
                     color = GREEN if p > prev_close else RED
                     step = -1 if y > prevcl_Y else 1 # compute up/down direction for chart area fill
                     for ys in range(y,prevcl_Y+step,step): # draw area fill
-                        dim_y = y/ys if step == 1 else ys/y # dimmer color near prev close
-                        self.matrix.draw_pixel((x,ys-1),tuple([int(i * 0.25 * dim_y) for i in color]))
+                        self.matrix.draw_pixel((x,ys-1),tuple([int(i * 0.25) for i in color]))
                     self.matrix.draw_pixel((x,y-1),color) # finally, draw the price values
 
             # Compute the up/down color        

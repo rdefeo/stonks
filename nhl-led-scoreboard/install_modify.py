@@ -72,31 +72,28 @@ with open(f"{nhl_path}/src/data/scoreboard_config.py",'r+') as sconfig:
         sconfig.write(text)
     else:
         print(f"\n * '{nhl_path}/src/data/scoreboard_config.py' not modified as it has already been updated")
-    sconfig.close()
 print("done.")
 
-# Modify the 'config/config.json' file
+# Modify the 'config/config.json' file to add the default stonks board configuration
 print(f"Updating '{nhl_path}/config/config.json'... ")
 new_config = dict()
 new_config["tickers"] = ["DOGE-USD", "TSLA"]
 new_config["rotation_rate"] = 6
 new_config["chart_enabled"] = True
 new_config["logo_enabled"] = False
-config = json.load(open(f"{nhl_path}/config/config.json"))
+with open(f"{nhl_path}/config/config.json", 'r') as json_in:
+    config = json.load(json_in)
 config['boards']['stonks'] = new_config
-with open(f"{nhl_path}/config/config.json","w") as json_out:
+with open(f"{nhl_path}/config/config.json", 'w') as json_out:
     json.dump(config,json_out,indent=4)
-    json_out.close()
 print("done.")
 
 # Modify the 'config/config.schema.json' file. Checks if changes present to prevent duplicates.
 print(f"Updating '{nhl_path}/config/config.schema.json'... ")
 with open(f"{nhl_path}/config/config.schema.json", "r") as f:
     schema = json.load(f)
-    f.close()
 with open(f"{cwd}/stonks.config.schema.json", "r") as f:
     stonks_schema = json.load(f)
-    f.close()
 
 # Add stonks board settings from config.schema.json to boards properties.
 schema["properties"]["boards"]["properties"]["stonks"] = stonks_schema
@@ -128,6 +125,5 @@ for change in change_list:
 # Write out modified schema to nhl directory.
 with open(f"{nhl_path}/config/config.schema.json", "w") as outfile:
     json.dump(schema, outfile, indent=4)
-    outfile.close()
 print("... done.")
 

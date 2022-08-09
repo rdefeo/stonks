@@ -41,7 +41,7 @@ to the top of the file, near the other `from` statements.
 Then, add the following lines at the bottom of the file:
 ```
     def stonks(self, data, matrix, sleepEvent):
-        Stonks(data, matrix, sleepEvent)
+        Stonks(data, matrix, sleepEvent).render()
 ```
 Ensure you have the leading spacing correct, because python.
 
